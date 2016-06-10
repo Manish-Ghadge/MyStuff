@@ -5,6 +5,7 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
+            System.Console.WriteLine("My First Sample");
         }
     }
 }

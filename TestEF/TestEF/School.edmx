@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TestDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tblStudent">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" />
+          <Property Name="StudentAddressId" Type="int" />
+        </EntityType>
+        <EntityType Name="tblStudentAddress">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Address" Type="nvarchar(max)" />
+          <Property Name="City" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_tblStudent_tblStudentAddress">
+          <End Role="tblStudentAddress" Type="Self.tblStudentAddress" Multiplicity="0..1" />
+          <End Role="tblStudent" Type="Self.tblStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStudentAddress">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblStudent">
+              <PropertyRef Name="StudentAddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="usp_GetStudentById" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="studid" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="TestDbModelStoreContainer">
+          <EntitySet Name="tblStudent" EntityType="Self.tblStudent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tblStudentAddress" EntityType="Self.tblStudentAddress" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tblStudent_tblStudentAddress" Association="Self.FK_tblStudent_tblStudentAddress">
+            <End Role="tblStudentAddress" EntitySet="tblStudentAddress" />
+            <End Role="tblStudent" EntitySet="tblStudent" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TestDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tblStudent">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="StudentAddressId" Type="Int32" />
+          <NavigationProperty Name="tblStudentAddress" Relationship="TestDbModel.FK_tblStudent_tblStudentAddress" FromRole="tblStudent" ToRole="tblStudentAddress" />
+        </EntityType>
+        <EntityType Name="tblStudentAddress">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="tblStudents" Relationship="TestDbModel.FK_tblStudent_tblStudentAddress" FromRole="tblStudentAddress" ToRole="tblStudent" />
+        </EntityType>
+        <EntityContainer Name="TestDbEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tblStudents" EntityType="Self.tblStudent" />
+          <EntitySet Name="tblStudentAddresses" EntityType="Self.tblStudentAddress" />
+          <AssociationSet Name="FK_tblStudent_tblStudentAddress" Association="TestDbModel.FK_tblStudent_tblStudentAddress">
+            <End Role="tblStudentAddress" EntitySet="tblStudentAddresses" />
+            <End Role="tblStudent" EntitySet="tblStudents" />
+          </AssociationSet>
+          <FunctionImport Name="usp_test" ReturnType="Collection(TestDbModel.usp_GetStudentById_Result)">
+            <Parameter Name="studid" Mode="In" Type="Int32" />
+          </FunctionImport>
+        </EntityContainer>
+        <Association Name="FK_tblStudent_tblStudentAddress">
+          <End Type="TestDbModel.tblStudentAddress" Role="tblStudentAddress" Multiplicity="0..1" />
+          <End Type="TestDbModel.tblStudent" Role="tblStudent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tblStudentAddress">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="tblStudent">
+              <PropertyRef Name="StudentAddressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="usp_GetStudentById_Result">
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="StudentAddressId" Nullable="true" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TestDbModelStoreContainer" CdmEntityContainer="TestDbEntities">
+          <EntitySetMapping Name="tblStudents">
+            <EntityTypeMapping TypeName="TestDbModel.tblStudent">
+              <MappingFragment StoreEntitySet="tblStudent">
+                <ScalarProperty Name="StudentAddressId" ColumnName="StudentAddressId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblStudentAddresses">
+            <EntityTypeMapping TypeName="TestDbModel.tblStudentAddress">
+              <MappingFragment StoreEntitySet="tblStudentAddress">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="City" ColumnName="City" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="usp_test" FunctionName="TestDbModel.Store.usp_GetStudentById">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestDbModel.usp_GetStudentById_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="StudentAddressId" ColumnName="StudentAddressId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -6,7 +6,7 @@
     <edmx:Diagrams>
       <Diagram DiagramId="86819281efe54eeaa3765637da366b95" Name="Diagram1">
         <EntityTypeShape EntityType="TestDbModel.tblStudent" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="TestDbModel.tblStudentAddress" Width="2.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestDbModel.tblStudentAddress" Width="2.5" PointX="6.375" PointY="0.875" IsExpanded="true" />
         <AssociationConnector Association="TestDbModel.FK_tblStudent_tblStudentAddress" />
       </Diagram>
     </edmx:Diagrams>

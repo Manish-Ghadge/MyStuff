@@ -30,13 +30,13 @@ namespace TestEF
         public virtual DbSet<tblStudent> tblStudents { get; set; }
         public virtual DbSet<tblStudentAddress> tblStudentAddresses { get; set; }
     
-        public virtual ObjectResult<usp_GetStudentById_Result> usp_test(Nullable<int> studid)
+        public virtual ObjectResult<usp_GetStudentById_Result> usp_GetStudentById(Nullable<int> studid)
         {
             var studidParameter = studid.HasValue ?
                 new ObjectParameter("studid", studid) :
                 new ObjectParameter("studid", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetStudentById_Result>("usp_test", studidParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<usp_GetStudentById_Result>("usp_GetStudentById", studidParameter);
         }
     }
 }

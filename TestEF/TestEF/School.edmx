@@ -17,7 +17,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Address" Type="nvarchar(max)" />
           <Property Name="City" Type="nvarchar" MaxLength="50" />
         </EntityType>
@@ -73,7 +73,7 @@
             <End Role="tblStudentAddress" EntitySet="tblStudentAddresses" />
             <End Role="tblStudent" EntitySet="tblStudents" />
           </AssociationSet>
-          <FunctionImport Name="usp_test" ReturnType="Collection(TestDbModel.usp_GetStudentById_Result)">
+          <FunctionImport Name="usp_GetStudentById" ReturnType="Collection(TestDbModel.usp_GetStudentById_Result)">
             <Parameter Name="studid" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
@@ -118,7 +118,7 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="usp_test" FunctionName="TestDbModel.Store.usp_GetStudentById">
+          <FunctionImportMapping FunctionImportName="usp_GetStudentById" FunctionName="TestDbModel.Store.usp_GetStudentById">
             <ResultMapping>
               <ComplexTypeMapping TypeName="TestDbModel.usp_GetStudentById_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
